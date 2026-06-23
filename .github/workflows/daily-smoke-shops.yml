@@ -1,0 +1,19 @@
+name: Daily Smoke Shop Campaign
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # 8 AM UTC daily
+
+jobs:
+  send-emails:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      
+      - name: Run smoke shop sender
+        run: python3 send_smoke_shops.py
