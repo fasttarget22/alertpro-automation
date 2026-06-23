@@ -26,6 +26,7 @@ AlertPro CCTV
 +971 56 646 8525
 https://alertpro.appabbottabad.com"""
 
+# Load today's smoke shop list (400 shops)
 contacts = []
 csv_file = f"smoke_shops_day_{datetime.now().strftime('%Y%m%d')}.csv"
 
@@ -38,7 +39,7 @@ except FileNotFoundError:
     print(f"❌ File not found: {csv_file}")
     exit()
 
-print(f"\n✅ Loaded {len(contacts)} smoke shops")
+print(f"\n✅ Loaded {len(contacts)} smoke shops from {csv_file}")
 
 sent_count = 0
 failed_count = 0
@@ -60,15 +61,16 @@ try:
             
             server.send_message(msg)
             sent_count += 1
-            print(f"[{i}] ✅ {contact['company']}")
-            time.sleep(1)
+            print(f"[{i}/{len(contacts)}] ✅ {contact['company']}")
+            time.sleep(0.5)  # Faster sending (0.5s instead of 1s)
             
         except Exception as e:
             failed_count += 1
-            print(f"[{i}] ❌ {contact['company']}")
+            print(f"[{i}/{len(contacts)}] ❌ {contact['company']}")
     
     server.quit()
-    print(f"\n✅ Sent: {sent_count} | Failed: {failed_count}\n")
+    print(f"\n✅ Sent: {sent_count}/{len(contacts)}")
+    print(f"❌ Failed: {failed_count}/{len(contacts)}\n")
     
 except Exception as e:
     print(f"❌ Error: {str(e)}")
