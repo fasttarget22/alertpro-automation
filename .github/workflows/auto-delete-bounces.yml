@@ -1,0 +1,18 @@
+name: Auto-Delete Bounced Emails
+on:
+  schedule:
+    - cron: '30 8 * * *'
+
+jobs:
+  delete-bounces:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Auto-delete bounces
+        run: |
+          pip install imapclient --break-system-packages
+          python3 auto_delete_bounces_imap.py
