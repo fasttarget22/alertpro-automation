@@ -1,0 +1,35 @@
+name: Daily Bounce Cleanup
+on:
+  schedule:
+    - cron: '30 8 * * *'  # 8:30 AM UTC every day
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Run bounce cleanup
+        env:
+          GMAIL_USER: alertprocctv@gmail.com
+          GMAIL_PASSWORD: ltvo whwc chok lyez
+        run: |
+          python3 << 'PYTHON'
+          import imaplib
+          mail = imaplib.IMAP4_SSL("imap.gmail.com", timeout=30)
+          mail.login("alertprocctv@gmail.com", "ltvo whwc chok lyez")
+          mail.select("INBOX")
+          status, messages = mail.search(None, 'FROM "mailer-daemon"')
+          email_ids = messages[0].split()
+          print(f"Found: {len(email_ids)} bounces")
+          for email_id in email_ids:
+              mail.store(email_id, '+FLAGS', '\\Deleted')
+          mail.expunge()
+          mail.logout()
+          print(f"✅ Deleted {len(email_ids)} bounces")
+          PYTHON
+      - name: Log completion
+        run: echo "✅ Daily cleanup complete"
