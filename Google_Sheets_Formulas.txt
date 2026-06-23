@@ -1,0 +1,50 @@
+
+GOOGLE SHEETS SETUP INSTRUCTIONS
+==================================
+
+COLUMN FORMULAS (Add these to your sheet):
+
+Column E - Email Opened (Auto-detect if reply or call):
+=IF(OR(F2="Yes",G2="Yes"),"Yes","No")
+
+Column H - Converted (Auto-detect if reply AND call):
+=IF(AND(F2="Yes",G2="Yes"),"Yes","No")
+
+SUMMARY SECTION (Add below your data):
+
+Row below data + 2:
+Total Emails: =COUNTA(B:B)-1
+Total Opened: =COUNTIF(E:E,"Yes")
+Total Replies: =COUNTIF(F:F,"Yes")
+Total Calls: =COUNTIF(G:G,"Yes")
+Total Converted: =COUNTIF(H:H,"Yes")
+Conversion Rate: =COUNTIF(H:H,"Yes")/COUNTA(B:B)*100&"%"
+
+DAILY WORKFLOW:
+
+Morning (8 AM):
+✅ 400 smoke shop emails sent automatically
+
+Throughout Day:
+✅ Gmail: Check for replies → Mark "Yes" in column F
+✅ WhatsApp: Check messages → Mark "Yes" in column E
+✅ Phone: Answer calls → Mark "Yes" in column G
+✅ Sheet: Update tracking in real-time
+
+Evening:
+✅ Review metrics (Total Opened, Replies, Conversions)
+✅ Plan next day follow-ups
+
+EXPECTED DAILY RESULTS:
+- 400 emails sent
+- 80-120 opens (20-30%)
+- 8-20 replies (2-5%)
+- 2-6 conversions (20-30%)
+- Revenue: $300-900/day
+
+MONTHLY GOAL (30 days):
+- 12,000 emails
+- 2,400-3,600 opens
+- 240-600 replies
+- 48-180 conversions
+- $7,200-27,000 revenue
