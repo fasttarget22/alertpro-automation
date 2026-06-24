@@ -1,19 +1,9 @@
-name: Daily Smoke Shop Campaign
-
+name: Daily Smoke Shop Campaign (DISABLED)
 on:
-  schedule:
-    - cron: '0 8 * * *'  # 8 AM UTC daily
+  workflow_dispatch:  # Manual only - no longer automatic
 
 jobs:
   send-emails:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-      
-      - name: Run smoke shop sender
-        run: python3 send_smoke_shops.py
+      - run: echo "This workflow is disabled. Using Claude Code on PC instead."

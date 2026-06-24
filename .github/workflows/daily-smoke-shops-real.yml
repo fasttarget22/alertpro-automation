@@ -1,18 +1,9 @@
-name: Daily Smoke Shop Emails (Real)
+name: Daily Smoke Shop Emails Real (DISABLED)
 on:
-  schedule:
-    - cron: '0 8 * * *'
+  workflow_dispatch:  # Manual only - no longer automatic
 
 jobs:
   send-emails:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'
-      - name: Send real smoke shop emails
-        run: python3 send_smoke_shops_real.py
-      - name: Log completion
-        run: echo "✅ Real emails sent successfully"
+      - run: echo "This workflow is disabled. Using Claude Code on PC instead."
