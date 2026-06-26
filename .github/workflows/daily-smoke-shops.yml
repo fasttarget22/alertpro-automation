@@ -1,9 +1,8 @@
-name: Daily Smoke Shop Campaign (DISABLED)
+name: DISABLED
 on:
-  workflow_dispatch:  # Manual only - no longer automatic
-
+  workflow_dispatch:
 jobs:
-  send-emails:
+  disabled:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "This workflow is disabled. Using Claude Code on PC instead."
+      - run: echo "Disabled"

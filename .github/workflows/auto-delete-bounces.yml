@@ -1,8 +1,8 @@
-name: Auto-Delete Bounced Emails (DISABLED)
+name: DISABLED3
 on:
   workflow_dispatch:
 jobs:
   disabled:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Disabled - using hourly-bounce-cleanup instead"
+      - run: echo "Disabled"
