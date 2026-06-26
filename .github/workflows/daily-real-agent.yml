@@ -14,14 +14,14 @@ jobs:
           python-version: "3.11"
       - name: Install dependencies
         run: pip install requests beautifulsoup4
+      - name: Create data folder
+        run: mkdir -p data
       - name: Run daily agent
-        run: |
-          mkdir -p data
-          python daily_agent.py
+        run: python daily_agent.py
       - name: Save sent log to prevent duplicates
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add data/sent_log.csv || true
-          git commit -m "Update sent log - $(date +%Y-%m-%d)" || true
+          git commit -m "Update sent log $(date +%Y-%m-%d)" || true
           git push || true
