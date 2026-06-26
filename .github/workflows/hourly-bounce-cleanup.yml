@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - name: Clean bounces
+      - name: Clean all bounce emails
         run: |
           python3 << 'PYTHON'
           import imaplib
@@ -20,7 +20,15 @@ jobs:
           mail.login("alertprocctv@gmail.com", "ltvo whwc chok lyez")
           mail.select("INBOX")
           total = 0
-          for kw in ['FROM "mailer-daemon"', 'FROM "Mail Delivery"', 'FROM "postmaster"']:
+          for kw in [
+              'FROM "mailer-daemon"',
+              'FROM "Mail Delivery Subsystem"',
+              'FROM "postmaster"',
+              'FROM "Mail Delivery"',
+              'SUBJECT "Delivery incomplete"',
+              'SUBJECT "Undeliverable"',
+              'SUBJECT "Delivery Status"'
+          ]:
               try:
                   _, msgs = mail.search(None, kw)
                   for i in msgs[0].split():
