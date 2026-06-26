@@ -8,20 +8,38 @@ jobs:
   run-agent:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Checkout latest code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.11"
+
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: pip install requests beautifulsoup4 googlesearch-python
+
       - name: Create data folder
         run: mkdir -p data
+
+      - name: Show already sent emails
+        run: |
+          if [ -f data/sent_log.csv ]; then
+            echo "Already sent to: $(wc -l < data/sent_log.csv) emails"
+          else
+            echo "No sent log found - first run"
+          fi
+
       - name: Run daily agent
         run: python daily_agent.py
+
       - name: Save sent log to prevent duplicates
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+          git pull origin main --rebase || true
           git add data/sent_log.csv || true
-          git commit -m "Update sent log $(date +%Y-%m-%d)" || true
-          git push || true
+          git diff --staged --quiet || git commit -m "Update sent log $(date +%Y-%m-%d)"
+          git push origin main || true
