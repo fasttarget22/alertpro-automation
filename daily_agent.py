@@ -28,6 +28,27 @@ AlertPro CCTV
 +971 56 646 8525
 https://alertpro.appabbottabad.com"""
 
+SKIP_DOMAINS = [
+    "yelp.com","google.com","facebook.com","instagram.com","twitter.com",
+    "linkedin.com","yellowpages.com","tripadvisor.com","foursquare.com",
+    "wix.com","squarespace.com","wordpress.com","shopify.com","godaddy.com",
+    "amazonaws.com","sentry.io","fountmedia.com","bloyal.com","indeed.com",
+    "ziprecruiter.com","glassdoor.com","bbb.org","thumbtack.com","groupon.com",
+    "angi.com","houzz.com","nextdoor.com","patch.com","citysearch.com",
+    "mapquest.com","whitepages.com","spokeo.com","yellowbook.com"
+]
+
+def is_valid_email(email):
+    email = email.strip().rstrip(".")
+    if "www." in email: return False
+    if email.endswith("."): return False
+    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    if not re.match(pattern, email): return False
+    domain = email.split("@")[1].lower()
+    if domain.startswith("www."): return False
+    if any(s in domain for s in SKIP_DOMAINS): return False
+    return True
+
 def load_sent():
     sent = set()
     os.makedirs("data", exist_ok=True)
@@ -46,21 +67,39 @@ def save_sent(c, e, s, st):
         w.writerow({"date":datetime.now().strftime("%Y-%m-%d"),"company":c,"email":e,"state":s,"status":st})
 
 def extract_emails(text):
-    skip = ["example","sentry","wixpress","godaddy","amazonaws","fountmedia","bloyal","facebook","instagram","yelp","google","indeed","shopify","squarespace","wordpress"]
     emails = re.findall(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", text)
-    return list(set(e.lower() for e in emails if not any(s in e.lower() for s in skip)))
+    valid = []
+    for e in emails:
+        e = e.lower().rstrip(".")
+        if is_valid_email(e):
+            valid.append(e)
+    return list(set(valid))
 
 def find_leads(state, sent):
     print(f"Searching {state}...")
     leads = []
-    for q in [f"smoke shop {state} email", f"vape shop {state} contact"]:
+    for q in [f"smoke shop {state} email contact",
+               f"vape shop {state} contact email",
+               f"tobacco store {state} email"]:
         if len(leads) >= 5: break
         try:
-            r = requests.get("https://serpapi.com/search", params={"q":q,"api_key":SERPAPI_KEY,"engine":"google"}, timeout=15)
+            r = requests.get("https://serpapi.com/search",
+                params={"q":q,"api_key":SERPAPI_KEY,"engine":"google"}, timeout=15)
             for res in r.json().get("organic_results", [])[:5]:
-                for email in extract_emails(res.get("snippet","")+res.get("title",""))[:1]:
+                title = res.get("title","")
+                snippet = res.get("snippet","")
+                link = res.get("link","")
+                emails = extract_emails(snippet + " " + title)
+                if not emails and link:
+                    try:
+                        h = {"User-Agent":"Mozilla/5.0"}
+                        page = requests.get(link, headers=h, timeout=5).text
+                        emails = extract_emails(page)
+                    except: pass
+                for email in emails[:1]:
                     if email not in sent and email not in [l["email"] for l in leads]:
-                        leads.append({"company":res.get("title","Shop")[:50],"email":email,"state":state})
+                        leads.append({"company":title[:50],"email":email,"state":state})
+                        print(f"  ✅ {email}")
         except: pass
         time.sleep(1)
     print(f"  Found {len(leads)}")
@@ -87,11 +126,15 @@ def clean_bounces():
         m.login(GMAIL_USER, GMAIL_PASSWORD)
         m.select("INBOX")
         total = 0
-        for kw in ['FROM "mailer-daemon"','FROM "postmaster"','FROM "Mail Delivery"']:
-            _, msgs = m.search(None, kw)
-            for i in msgs[0].split():
-                m.store(i, "+FLAGS", "\\Deleted")
-                total += 1
+        for kw in ['FROM "mailer-daemon"','FROM "postmaster"',
+                   'FROM "Mail Delivery"','FROM "Mail Delivery Subsystem"',
+                   'SUBJECT "Delivery incomplete"','SUBJECT "Undeliverable"']:
+            try:
+                _, msgs = m.search(None, kw)
+                for i in msgs[0].split():
+                    m.store(i, "+FLAGS", "\\Deleted")
+                    total += 1
+            except: pass
         m.expunge()
         m.logout()
         print(f"Cleaned {total} bounces")
@@ -105,6 +148,7 @@ def main():
     for state in STATES:
         if len(leads) >= TARGET: break
         leads.extend(find_leads(state, sent))
+    print(f"\nTotal valid leads: {len(leads)}")
     sent_count = 0
     for i, lead in enumerate(leads[:TARGET], 1):
         if send_email(lead["company"], lead["email"]):
@@ -114,7 +158,7 @@ def main():
         else:
             save_sent(lead["company"], lead["email"], lead["state"], "failed")
         time.sleep(2)
-    print(f"Sent: {sent_count}")
+    print(f"\nSent: {sent_count}")
     clean_bounces()
     print("DONE!")
 
