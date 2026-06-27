@@ -8,7 +8,7 @@ jobs:
   run-agent:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout latest code
+      - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -24,18 +24,10 @@ jobs:
       - name: Create data folder
         run: mkdir -p data
 
-      - name: Show already sent emails
-        run: |
-          if [ -f data/sent_log.csv ]; then
-            echo "Already sent to: $(wc -l < data/sent_log.csv) emails"
-          else
-            echo "No sent log found - first run"
-          fi
-
       - name: Run daily agent
         run: python daily_agent.py
 
-      - name: Save sent log to prevent duplicates
+      - name: Save sent log
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
