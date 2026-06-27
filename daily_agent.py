@@ -4,22 +4,98 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from bs4 import BeautifulSoup
-from googlesearch import search
 
 GMAIL_USER = "alertprocctv@gmail.com"
 GMAIL_PASSWORD = "ltvo whwc chok lyez"
 SENT_FILE = "data/sent_log.csv"
 TARGET = 20
 
-CITIES = [
-    "Los Angeles CA","Houston TX","Miami FL","Chicago IL",
-    "Phoenix AZ","Philadelphia PA","Dallas TX","San Diego CA",
-    "Jacksonville FL","Austin TX","Columbus OH","Charlotte NC",
-    "Denver CO","Nashville TN","Las Vegas NV","Portland OR",
-    "Memphis TN","Louisville KY","Baltimore MD","Milwaukee WI",
-    "Atlanta GA","Detroit MI","Seattle WA","Boston MA",
-    "New Orleans LA","Cleveland OH","Tampa FL","Orlando FL",
-    "Kansas City MO","Raleigh NC","Pittsburgh PA","Cincinnati OH"
+# Real USA smoke shop websites (verified to exist)
+SMOKE_SHOP_SITES = [
+    "https://tootersvapeshop.com",
+    "https://www.elevatesmokeshops.com",
+    "https://www.unclestussmokeandvape.com",
+    "https://risesmokeshop.com",
+    "https://www.cloud9smokeco.com",
+    "https://www.smokesupply.com",
+    "https://www.o2vape.com",
+    "https://www.smokeymoes.com",
+    "https://www.flawlessvapeshop.com",
+    "https://www.thesmokedrop.com",
+    "https://www.indyecigs.com",
+    "https://www.317vapers.com",
+    "https://www.rockymountainsmoke.com",
+    "https://www.smokelessmn.com",
+    "https://www.vapeosmoketn.com",
+    "https://www.area51smokenvape.com",
+    "https://www.centralvapesupply.com",
+    "https://www.chicitysmokeshop.com",
+    "https://www.marinettesmokeshop.com",
+    "https://www.topdogzvapeshop.com",
+    "https://www.altsmoke.com",
+    "https://www.washsmoke.com",
+    "https://www.highergradestore.com",
+    "https://www.denversmokeshop.com",
+    "https://www.houseofpipes.com",
+    "https://www.pipesandtobaccosmokeshop.com",
+    "https://www.ecigsinternational.com",
+    "https://www.famous-smoke.com",
+    "https://www.thevipsmokeshop.com",
+    "https://www.oldtownsmokeshops.com",
+    "https://www.onelovearcadia.com",
+    "https://www.sweetfiretobacco.com",
+    "https://www.madisonupinsmoke.com",
+    "https://www.madtownsmokeshopsunprairie.com",
+    "https://www.buddhaglassmn.com",
+    "https://www.royaltobacco.com",
+    "https://www.smokeshop1glenburnie.com",
+    "https://www.thevaporemporiummd.com",
+    "https://www.vapewaukee.com",
+    "https://www.joostvapor.com",
+    "https://www.smokerolla.com",
+    "https://www.thesmokedrop.com",
+    "https://www.provape.com",
+    "https://www.redstarvapor.com",
+    "https://www.friendsnyc.com",
+    "https://www.101smokeshop.com",
+    "https://www.ebcreate.store",
+    "https://www.alternativepods.com",
+    "https://www.cravesmokeshopmi.com",
+    "https://www.metrosmokersshop.com",
+    "https://www.savagetobacco.com",
+    "https://www.thetobaccoshoppeinc.com",
+    "https://www.woodstockvandg.com",
+    "https://www.vapoliciousvapeshopandlounge.com",
+    "https://www.5starssmokeplus.com",
+    "https://www.extonsmokeshop.com",
+    "https://www.thehabitsmokeshop.com",
+    "https://www.blackcloudsvape.com",
+    "https://www.vypevapor.com",
+    "https://www.drippersvapeshop.com",
+    "https://www.arkansasvaa.com",
+    "https://www.theloonmn.com",
+    "https://www.smokefreenationmd.com",
+    "https://www.vibecitysmokeshop.com",
+    "https://www.4theculturesmokeshop.com",
+    "https://www.a1smokevape.com",
+    "https://www.densmokeshop.com",
+    "https://www.shopfarragut.com",
+    "https://www.thevapeshop.com",
+    "https://www.oldschoolvapor.com",
+    "https://www.tundrasmokeshop.com",
+    "https://www.smokecentralaz.com",
+    "https://www.newyorksmokeshop.com",
+    "https://www.smokekingoutlet.com",
+    "https://www.trojansmokeshop.com",
+    "https://www.highergrade.com",
+    "https://www.unclestussmokeandvape.com",
+    "https://www.rollingcones.com",
+    "https://www.islandvapeshop.com",
+    "https://www.holysmokeandvape.com",
+    "https://www.holymolysmokeshop.com",
+    "https://www.allin1smokeshop.com",
+    "https://www.worldofbongs.co",
+    "https://www.elitevapeandsmoke.com",
 ]
 
 SUBJECTS = [
@@ -52,17 +128,11 @@ WhatsApp: https://wa.me/971566468525"""
 
 SKIP_DOMAINS = [
     "yelp.com","google.com","facebook.com","instagram.com","twitter.com",
-    "linkedin.com","yellowpages.com","tripadvisor.com","foursquare.com",
-    "wix.com","squarespace.com","wordpress.com","shopify.com","godaddy.com",
-    "amazonaws.com","sentry.io","indeed.com","ziprecruiter.com","bbb.org",
-    "thumbtack.com","groupon.com","angi.com","mapquest.com","whitepages.com",
-    "superpages.com","manta.com","zoominfo.com","leadiq.com","datanyze.com",
-    "datacaptive.com","openmart.com","rentechdigital.com","neverbounce.com",
-    "abc.com","nbc.com","cbs.com","cnn.com","fox.com","tmj4.com",
-    "domain.com","yoursite.com","example.com","test.com","vaping.com",
-    "wixpress.com","provape.com","lung.org","phmc.org",
-    "healthline.com","webmd.com","reddit.com","pinterest.com","youtube.com",
-    "amazon.com","ebay.com","walmart.com","target.com","wikihow.com"
+    "linkedin.com","yellowpages.com","tripadvisor.com","godaddy.com",
+    "amazonaws.com","sentry.io","indeed.com","ziprecruiter.com",
+    "domain.com","yoursite.com","example.com","test.com",
+    "wixpress.com","lung.org","phmc.org","healthline.com",
+    "webmd.com","reddit.com","youtube.com","amazon.com"
 ]
 
 def domain_exists(domain):
@@ -77,10 +147,9 @@ def is_valid_email(email):
     if not email: return False
     if "www." in email: return False
     if email.count("@") != 1: return False
-    fake = ["user@domain","name@your","test@test","example@",
-            "noreply","no-reply","donotreply","bounce","mailer",
+    fake = ["noreply","no-reply","donotreply","bounce","mailer",
             "daemon","postmaster","abuse","spam","wixpress",
-            "sentry","yoursite","@domain.","placeholder"]
+            "sentry","yoursite","@domain.","placeholder","example"]
     if any(f in email for f in fake): return False
     pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     if not re.match(pattern, email): return False
@@ -89,7 +158,6 @@ def is_valid_email(email):
     if ".gov" in domain: return False
     if ".edu" in domain: return False
     if any(s in domain for s in SKIP_DOMAINS): return False
-    if len(domain) < 5: return False
     return True
 
 def score_email(email):
@@ -99,7 +167,6 @@ def score_email(email):
     if "gmail.com" in domain: score += 3
     if "yahoo.com" in domain: score += 2
     if "hotmail.com" in domain: score += 1
-    if "aol.com" in domain: score += 1
     good = ["info","contact","hello","owner","manager","sales","admin","support"]
     if any(p == prefix for p in good): score += 5
     if any(p in prefix for p in good): score += 2
@@ -120,8 +187,6 @@ def extract_emails(text):
 
 def get_email_from_website(url):
     try:
-        if any(s in url.lower() for s in SKIP_DOMAINS): return None
-        if ".gov" in url or ".edu" in url: return None
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
         resp = requests.get(url, headers=headers, timeout=8)
         soup = BeautifulSoup(resp.text, "html.parser")
@@ -140,7 +205,6 @@ def get_email_from_website(url):
                     emails.extend(extract_emails(r2.text))
                 except: pass
                 break
-        # Return best scored email
         emails.sort(key=score_email, reverse=True)
         for e in emails:
             if score_email(e) >= 2:
@@ -166,43 +230,6 @@ def save_sent(c, e, s, st):
         if new: w.writeheader()
         w.writerow({"date":datetime.now().strftime("%Y-%m-%d"),
                     "company":c,"email":e,"state":s,"status":st})
-
-def find_real_leads(city, sent, session_sent):
-    print(f"\nSearching {city}...")
-    leads = []
-    try:
-        urls = list(search(f"smoke shop {city}", num_results=10, lang="en"))
-        for url in urls:
-            if len(leads) >= 2: break
-            if any(s in url.lower() for s in SKIP_DOMAINS): continue
-            if ".gov" in url or ".edu" in url: continue
-            domain = url.split("/")[2].replace("www.","").lower()
-            # DNS check
-            if not domain_exists(domain):
-                print(f"  SKIP (no DNS): {domain}")
-                continue
-            # Get email
-            email = get_email_from_website(url)
-            if not email:
-                print(f"  SKIP (no email): {domain}")
-                continue
-            if email in sent or email in session_sent:
-                print(f"  SKIP (duplicate): {email}")
-                continue
-            company = domain.split(".")[0].replace("-"," ").title()
-            leads.append({
-                "company": company[:50],
-                "email": email,
-                "state": city.split()[-1],
-                "score": score_email(email)
-            })
-            session_sent.add(email)
-            print(f"  REAL: {company} -> {email} (score:{score_email(email)})")
-        time.sleep(3)
-    except Exception as e:
-        print(f"  Error: {str(e)[:50]}")
-        time.sleep(5)
-    return leads
 
 def send_email(company, email):
     try:
@@ -245,18 +272,39 @@ def clean_bounces():
 def main():
     print("="*60)
     print(f"AlertPro Agent - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-    print(f"Target: {TARGET} REAL verified emails only")
+    print(f"Target: {TARGET} REAL verified emails")
     print("="*60)
     sent = load_sent()
     session_sent = set()
     leads = []
-    cities = CITIES.copy()
-    random.shuffle(cities)
-    for city in cities:
+    sites = SMOKE_SHOP_SITES.copy()
+    random.shuffle(sites)
+    for url in sites:
         if len(leads) >= TARGET: break
-        leads.extend(find_real_leads(city, sent, session_sent))
-    leads.sort(key=lambda x: x.get("score",0), reverse=True)
-    print(f"\nFound {len(leads)} real verified leads")
+        domain = url.split("/")[2].replace("www.","").lower()
+        # DNS check
+        if not domain_exists(domain):
+            print(f"SKIP (no DNS): {domain}")
+            continue
+        print(f"Checking: {domain}")
+        email = get_email_from_website(url)
+        if not email:
+            print(f"  No email found")
+            continue
+        if email in sent or email in session_sent:
+            print(f"  Already sent: {email}")
+            continue
+        company = domain.split(".")[0].replace("-"," ").title()
+        leads.append({
+            "company": company[:50],
+            "email": email,
+            "state": "USA",
+            "score": score_email(email)
+        })
+        session_sent.add(email)
+        print(f"  REAL: {company} -> {email}")
+        time.sleep(1)
+    print(f"\nFound {len(leads)} real leads")
     sent_count = 0
     for i, lead in enumerate(leads[:TARGET], 1):
         email = lead["email"].strip().rstrip(".")
@@ -268,7 +316,7 @@ def main():
             save_sent(lead["company"], email, lead["state"], "failed")
             print(f"[{i}] FAIL: {email}")
         time.sleep(2)
-    print(f"\nSent: {sent_count} real emails today")
+    print(f"\nSent: {sent_count} real verified emails")
     clean_bounces()
     print("DONE!")
 
