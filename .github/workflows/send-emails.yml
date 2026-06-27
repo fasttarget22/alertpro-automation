@@ -1,0 +1,27 @@
+name: Send Emails Daily
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install packages
+        run: pip install requests beautifulsoup4 googlesearch-python
+      - name: Run agent
+        run: |
+          mkdir -p data
+          python daily_agent.py
+      - name: Save sent log
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git pull --rebase || true
+          git add data/sent_log.csv || true
+          git diff --staged --quiet || git commit -m "Sent log $(date +%Y-%m-%d)"
+          git push || true
