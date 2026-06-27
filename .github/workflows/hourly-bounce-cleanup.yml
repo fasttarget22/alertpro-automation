@@ -24,10 +24,12 @@ jobs:
               'FROM "mailer-daemon"',
               'FROM "Mail Delivery Subsystem"',
               'FROM "postmaster"',
-              'FROM "Mail Delivery"',
               'SUBJECT "Delivery incomplete"',
+              'SUBJECT "Delivery Status Notification"',
+              'SUBJECT "Message not delivered"',
               'SUBJECT "Undeliverable"',
-              'SUBJECT "Delivery Status"'
+              'SUBJECT "Mail delivery failed"',
+              'SUBJECT "Failure Notice"'
           ]:
               try:
                   _, msgs = mail.search(None, kw)
