@@ -10,93 +10,125 @@ GMAIL_PASSWORD = "ltvo whwc chok lyez"
 SENT_FILE = "data/sent_log.csv"
 TARGET = 20
 
-# Real USA smoke shop websites (verified to exist)
-SMOKE_SHOP_SITES = [
-    "https://tootersvapeshop.com",
-    "https://www.elevatesmokeshops.com",
-    "https://www.unclestussmokeandvape.com",
-    "https://risesmokeshop.com",
-    "https://www.cloud9smokeco.com",
-    "https://www.smokesupply.com",
-    "https://www.o2vape.com",
-    "https://www.smokeymoes.com",
-    "https://www.flawlessvapeshop.com",
-    "https://www.thesmokedrop.com",
-    "https://www.indyecigs.com",
-    "https://www.317vapers.com",
-    "https://www.rockymountainsmoke.com",
-    "https://www.smokelessmn.com",
-    "https://www.vapeosmoketn.com",
-    "https://www.area51smokenvape.com",
-    "https://www.centralvapesupply.com",
-    "https://www.chicitysmokeshop.com",
-    "https://www.marinettesmokeshop.com",
-    "https://www.topdogzvapeshop.com",
-    "https://www.altsmoke.com",
-    "https://www.washsmoke.com",
-    "https://www.highergradestore.com",
-    "https://www.denversmokeshop.com",
-    "https://www.houseofpipes.com",
-    "https://www.pipesandtobaccosmokeshop.com",
-    "https://www.ecigsinternational.com",
-    "https://www.famous-smoke.com",
-    "https://www.thevipsmokeshop.com",
-    "https://www.oldtownsmokeshops.com",
-    "https://www.onelovearcadia.com",
-    "https://www.sweetfiretobacco.com",
-    "https://www.madisonupinsmoke.com",
-    "https://www.madtownsmokeshopsunprairie.com",
-    "https://www.buddhaglassmn.com",
-    "https://www.royaltobacco.com",
-    "https://www.smokeshop1glenburnie.com",
-    "https://www.thevaporemporiummd.com",
-    "https://www.vapewaukee.com",
-    "https://www.joostvapor.com",
-    "https://www.smokerolla.com",
-    "https://www.thesmokedrop.com",
-    "https://www.provape.com",
-    "https://www.redstarvapor.com",
-    "https://www.friendsnyc.com",
-    "https://www.101smokeshop.com",
-    "https://www.ebcreate.store",
-    "https://www.alternativepods.com",
-    "https://www.cravesmokeshopmi.com",
-    "https://www.metrosmokersshop.com",
-    "https://www.savagetobacco.com",
-    "https://www.thetobaccoshoppeinc.com",
-    "https://www.woodstockvandg.com",
-    "https://www.vapoliciousvapeshopandlounge.com",
-    "https://www.5starssmokeplus.com",
-    "https://www.extonsmokeshop.com",
-    "https://www.thehabitsmokeshop.com",
-    "https://www.blackcloudsvape.com",
-    "https://www.vypevapor.com",
-    "https://www.drippersvapeshop.com",
-    "https://www.arkansasvaa.com",
-    "https://www.theloonmn.com",
-    "https://www.smokefreenationmd.com",
-    "https://www.vibecitysmokeshop.com",
-    "https://www.4theculturesmokeshop.com",
-    "https://www.a1smokevape.com",
-    "https://www.densmokeshop.com",
-    "https://www.shopfarragut.com",
-    "https://www.thevapeshop.com",
-    "https://www.oldschoolvapor.com",
-    "https://www.tundrasmokeshop.com",
-    "https://www.smokecentralaz.com",
-    "https://www.newyorksmokeshop.com",
-    "https://www.smokekingoutlet.com",
-    "https://www.trojansmokeshop.com",
-    "https://www.highergrade.com",
-    "https://www.unclestussmokeandvape.com",
-    "https://www.rollingcones.com",
-    "https://www.islandvapeshop.com",
-    "https://www.holysmokeandvape.com",
-    "https://www.holymolysmokeshop.com",
-    "https://www.allin1smokeshop.com",
-    "https://www.worldofbongs.co",
-    "https://www.elitevapeandsmoke.com",
-]
+# Generate 700+ potential smoke shop domains
+def generate_sites():
+    cities = [
+        "houston","dallas","austin","sanantonio","fortworth","elpaso",
+        "losangeles","sandiego","fresno","sacramento","longbeach","oakland",
+        "jacksonville","miami","tampa","orlando","fortlauderdale","gainesville",
+        "newyork","brooklyn","buffalo","rochester","syracuse","albany",
+        "chicago","rockford","joliet","naperville","springfield","peoria",
+        "columbus","cleveland","cincinnati","toledo","akron","dayton",
+        "atlanta","savannah","macon","athens","roswell","marietta",
+        "charlotte","raleigh","greensboro","durham","fayetteville","asheville",
+        "detroit","grandrapids","lansing","flint","annarbor","kalamazoo",
+        "phoenix","tucson","mesa","chandler","scottsdale","tempe","glendale",
+        "philadelphia","pittsburgh","allentown","erie","scranton","reading",
+        "seattle","spokane","tacoma","bellevue","everett","renton",
+        "denver","colorado","aurora","fortcollins","lakewood","pueblo",
+        "nashville","memphis","knoxville","chattanooga","clarksville","jackson",
+        "indianapolis","fortwayne","evansville","southbend","bloomington",
+        "kansascity","stlouis","springfield","columbia","independence",
+        "baltimore","columbia","rockville","bethesda","frederick","annapolis",
+        "boston","worcester","cambridge","lowell","brockton","springfield",
+        "lasvegas","henderson","reno","sparks","northlasvegas",
+        "portland","eugene","salem","gresham","hillsboro","beaverton",
+        "louisville","lexington","bowling","owensboro","covington",
+        "neworleans","batonrouge","shreveport","lafayette","lakecharles",
+        "birmingham","montgomery","huntsville","mobile","tuscaloosa",
+        "richmond","norfolk","chesapeake","virginia","newport","alexandria",
+        "milwaukee","madison","greenbay","kenosha","racine","appleton",
+        "minneapolis","stpaul","rochester","duluth","bloomington","brooklyn",
+        "omaha","lincoln","bellevue","grandisland","kearney",
+        "tulsa","oklahomacity","norman","broken","lawton","edmond",
+        "albuquerque","lascruces","rio","santa","roswell","farmington",
+        "wichita","overland","kansascity","topeka","olathe","manhattan",
+        "columbia","charleston","north","greenville","rockhill","summerville",
+        "saltlake","westvalley","provo","westjordan","orem","sandy",
+        "hartford","bridgeport","newhaven","stamford","waterbury","norwalk",
+        "providence","cranston","warwick","pawtucket","eastprovidence",
+        "jackson","gulfport","southaven","hattiesburg","biloxi","olive",
+        "littlerock","fortsmith","fayetteville","springdale","jonesboro",
+        "desmoines","cedar","davenport","sioux","iowa","waterloo",
+        "sioux","rapid","aberdeen","brookings","watertown","mitchell",
+        "fargo","bismarck","grandforcs","minot","westernfargo","mandan",
+        "billings","missoula","greatfalls","bozeman","butte","helena",
+        "cheyenne","casper","laramie","gillette","rock","sheridan",
+        "boise","meridian","nampa","idaho","pocatello","caldwell",
+        "anchorage","juneau","fairbanks","sitka","ketchikan","wasilla",
+        "honolulu","pearl","hilo","kailua","kaneohe","waipahu",
+        "burlington","south","rutland","barre","montpelier","winooski",
+        "portland","lewiston","bangor","south","auburn","biddeford",
+        "manchester","nashua","concord","derry","rochester","dover",
+        "providence","cranston","warwick","pawtucket","woonsocket"
+    ]
+    
+    smoke_words = ["smoke","vape","vapor","tobacco","cigar","hookah"]
+    sites = []
+    
+    for city in cities:
+        city = city.lower().replace(" ","")
+        for word in smoke_words:
+            sites.append(f"https://www.{city}{word}shop.com")
+            sites.append(f"https://www.{city}{word}.com")
+            sites.append(f"https://www.{word}shop{city}.com")
+    
+    # Add known real sites
+    known_real = [
+        "https://tootersvapeshop.com",
+        "https://www.elevatesmokeshops.com",
+        "https://www.unclestussmokeandvape.com",
+        "https://risesmokeshop.com",
+        "https://www.cloud9smokeco.com",
+        "https://www.smokesupply.com",
+        "https://www.o2vape.com",
+        "https://www.smokeymoes.com",
+        "https://www.flawlessvapeshop.com",
+        "https://www.indyecigs.com",
+        "https://www.317vapers.com",
+        "https://www.rockymountainsmoke.com",
+        "https://www.smokelessmn.com",
+        "https://www.vapeosmoketn.com",
+        "https://www.area51smokenvape.com",
+        "https://www.centralvapesupply.com",
+        "https://www.chicitysmokeshop.com",
+        "https://www.altsmoke.com",
+        "https://www.washsmoke.com",
+        "https://www.highergradestore.com",
+        "https://www.houseofpipes.com",
+        "https://www.famous-smoke.com",
+        "https://www.sweetfiretobacco.com",
+        "https://www.buddhaglassmn.com",
+        "https://www.royaltobacco.com",
+        "https://www.thevaporemporiummd.com",
+        "https://www.joostvapor.com",
+        "https://www.smokerolla.com",
+        "https://www.redstarvapor.com",
+        "https://www.101smokeshop.com",
+        "https://www.ebcreate.store",
+        "https://www.cravesmokeshopmi.com",
+        "https://www.thetobaccoshoppeinc.com",
+        "https://www.extonsmokeshop.com",
+        "https://www.thehabitsmokeshop.com",
+        "https://www.blackcloudsvape.com",
+        "https://www.vypevapor.com",
+        "https://www.drippersvapeshop.com",
+        "https://www.vibecitysmokeshop.com",
+        "https://www.shopfarragut.com",
+        "https://www.thevapeshop.com",
+        "https://www.highergrade.com",
+        "https://www.islandvapeshop.com",
+        "https://www.holysmokeandvape.com",
+        "https://www.allin1smokeshop.com",
+        "https://www.elitevapeandsmoke.com",
+        "https://www.pipesandtobaccosmokeshop.com",
+        "https://www.ecigsinternational.com",
+        "https://www.madisonupinsmoke.com",
+        "https://www.tundrasmokeshopgreenbayreviews.com",
+        "https://www.topdogzvapeshop.com",
+    ]
+    
+    return list(set(sites + known_real))
 
 SUBJECTS = [
     "Quick question about your smoke shop security",
@@ -129,10 +161,9 @@ WhatsApp: https://wa.me/971566468525"""
 SKIP_DOMAINS = [
     "yelp.com","google.com","facebook.com","instagram.com","twitter.com",
     "linkedin.com","yellowpages.com","tripadvisor.com","godaddy.com",
-    "amazonaws.com","sentry.io","indeed.com","ziprecruiter.com",
-    "domain.com","yoursite.com","example.com","test.com",
-    "wixpress.com","lung.org","phmc.org","healthline.com",
-    "webmd.com","reddit.com","youtube.com","amazon.com"
+    "amazonaws.com","sentry.io","indeed.com","domain.com","yoursite.com",
+    "example.com","test.com","wixpress.com","lung.org","healthline.com",
+    "webmd.com","reddit.com","youtube.com","amazon.com","walmart.com"
 ]
 
 def domain_exists(domain):
@@ -191,7 +222,6 @@ def get_email_from_website(url):
         resp = requests.get(url, headers=headers, timeout=8)
         soup = BeautifulSoup(resp.text, "html.parser")
         emails = extract_emails(resp.text)
-        # Find contact page
         for a in soup.find_all("a", href=True):
             href = a["href"].lower()
             if any(k in href for k in ["contact","about"]):
@@ -274,26 +304,41 @@ def main():
     print(f"AlertPro Agent - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print(f"Target: {TARGET} REAL verified emails")
     print("="*60)
+    
     sent = load_sent()
     session_sent = set()
     leads = []
-    sites = SMOKE_SHOP_SITES.copy()
-    random.shuffle(sites)
-    for url in sites:
+    
+    # Generate and shuffle all potential sites
+    all_sites = generate_sites()
+    random.shuffle(all_sites)
+    print(f"Total potential sites: {len(all_sites)}")
+    
+    checked = 0
+    for url in all_sites:
         if len(leads) >= TARGET: break
-        domain = url.split("/")[2].replace("www.","").lower()
-        # DNS check
-        if not domain_exists(domain):
-            print(f"SKIP (no DNS): {domain}")
+        if checked > 200: break  # Don't check too many
+        
+        try:
+            domain = url.split("/")[2].replace("www.","").lower()
+        except:
             continue
-        print(f"Checking: {domain}")
+        
+        checked += 1
+        
+        # Quick DNS check
+        if not domain_exists(domain):
+            continue
+        
+        print(f"Found domain: {domain}")
         email = get_email_from_website(url)
+        
         if not email:
-            print(f"  No email found")
             continue
         if email in sent or email in session_sent:
-            print(f"  Already sent: {email}")
+            print(f"  Skip duplicate: {email}")
             continue
+        
         company = domain.split(".")[0].replace("-"," ").title()
         leads.append({
             "company": company[:50],
@@ -304,7 +349,8 @@ def main():
         session_sent.add(email)
         print(f"  REAL: {company} -> {email}")
         time.sleep(1)
-    print(f"\nFound {len(leads)} real leads")
+    
+    print(f"\nFound {len(leads)} real leads from {checked} checked")
     sent_count = 0
     for i, lead in enumerate(leads[:TARGET], 1):
         email = lead["email"].strip().rstrip(".")
@@ -316,6 +362,7 @@ def main():
             save_sent(lead["company"], email, lead["state"], "failed")
             print(f"[{i}] FAIL: {email}")
         time.sleep(2)
+    
     print(f"\nSent: {sent_count} real verified emails")
     clean_bounces()
     print("DONE!")
